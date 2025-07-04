@@ -80,7 +80,7 @@ document.getElementById("photoInput").addEventListener("change", async (e) => {
   reader.readAsDataURL(file);
 });
 
-const map = L.map('map').setView([-7.2575, 112.7521], 17);
+const map = L.map('map').setView([-7.274111, 112.759598], 17);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 let marker;
 map.on('click', function(e) {
