@@ -133,7 +133,7 @@ document.getElementById("exportBtn").addEventListener("click", async () => {
 
   const caption = document.getElementById("caption").value || "Tanpa Keterangan";
   const dtInput = document.getElementById("datetime").value || new Date().toLocaleString();
-  const latlng = selectedLatLng || L.latLng(-7.2575, 112.7521);
+  const latlng = selectedLatLng || L.latLng(-7.274111, 112.759598);
   const dmsLat = toDMS(latlng.lat, true);
   const dmsLng = toDMS(latlng.lng, false);
   const geotagText = `${dmsLat}, ${dmsLng} (±5m)`;
