@@ -106,17 +106,25 @@ document.getElementById("getLocationBtn").addEventListener("click", () => {
 
 document.getElementById("exportBtn").addEventListener("click", async () => {
   if (!resizedImg) return alert("Upload foto dulu!");
+
+  await new Promise(resolve => {
+    if (logo.complete) resolve();
+    else logo.onload = resolve;
+  });
+
   const canvas = document.getElementById("canvas");
   canvas.width = resizedImg.width;
   canvas.height = resizedImg.height;
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(resizedImg, 0, 0);
-  await new Promise(resolve => logo.complete ? resolve() : logo.onload = resolve);
+
+  // === gambar logo
   const shortest = Math.min(resizedImg.width, resizedImg.height);
   const logoSize = shortest * 0.2;
   ctx.drawImage(logo, 20, 20, logoSize, logoSize);
 
+  // === teks
   const fontSize = Math.floor(logoSize * 0.05);
   ctx.font = `${fontSize}px Arial`;
   ctx.fillStyle = "white";
@@ -157,8 +165,7 @@ document.getElementById("exportBtn").addEventListener("click", async () => {
     let lines = [];
     for (let n = 0; n < words.length; n++) {
       const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      const testWidth = metrics.width;
+      const testWidth = ctx.measureText(testLine).width;
       if (testWidth > maxWidth && n > 0) {
         lines.push(line.trim());
         line = words[n] + ' ';
@@ -176,10 +183,14 @@ document.getElementById("exportBtn").addEventListener("click", async () => {
 
   wrapText(ctx, caption, x, y, canvas.width - 60, fontSize + 6);
 
-  const img = new Image();
-  img.src = canvas.toDataURL("image/png");
-  document.getElementById("preview").innerHTML = "";
-  document.getElementById("preview").appendChild(img);
+  // === tampilkan hasil
+  const imageData = canvas.toDataURL("image/png");
+  const result = new Image();
+  result.src = imageData;
+  result.onload = () => {
+    document.getElementById("preview").innerHTML = "";
+    document.getElementById("preview").appendChild(result);
+  };
 });
 </script>
 </body>
