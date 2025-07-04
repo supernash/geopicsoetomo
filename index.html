@@ -21,6 +21,7 @@
   <button id="exportBtn">Export Gambar</button>
   <canvas id="canvas"></canvas>
   <div id="preview"></div>
+  <button id="downloadBtn">Download Gambar</button>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
@@ -107,6 +108,8 @@ document.getElementById("getLocationBtn").addEventListener("click", () => {
 
 document.getElementById("exportBtn").addEventListener("click", async () => {
   if (!resizedImg) return alert("Upload foto dulu!");
+  if (!selectedLatLng) return alert("Pilih lokasi di peta atau gunakan lokasi saya!");
+  if (!document.getElementById("datetime").value) return alert("Isi tanggal dan waktu!");
   const canvas = document.getElementById("canvas");
   canvas.width = resizedImg.width;
   canvas.height = resizedImg.height;
@@ -136,7 +139,7 @@ document.getElementById("exportBtn").addEventListener("click", async () => {
   const geotagText = `${dmsLat}, ${dmsLng} (±5m)`;
 
   const overlayHeight = 200;
-  ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+  ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
   ctx.fillRect(0, canvas.height - overlayHeight, canvas.width, overlayHeight);
 
   let x = 30;
@@ -185,6 +188,15 @@ document.getElementById("exportBtn").addEventListener("click", async () => {
   document.getElementById("preview").innerHTML = "";
   document.getElementById("preview").appendChild(img);
 });
+
+document.getElementById("downloadBtn").onclick = function() {
+  const img = document.querySelector("#preview img");
+  if (!img) return;
+  const a = document.createElement("a");
+  a.href = img.src;
+  a.download = "foto_rsds_overlay.png";
+  a.click();
+};
 </script>
 </body>
 </html>
